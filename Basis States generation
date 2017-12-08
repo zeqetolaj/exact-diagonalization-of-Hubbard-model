@@ -1,0 +1,132 @@
+program hubb_1
+implicit none
+! program to solve the HUbbard problem of a linear chain of an arbitrary number of sites and arbitrary number of particles
+integer::i,j,k,l,m
+!
+! M is the number of sites 
+!N_up is the number of up electrons 
+!N_dw is the number of down electrons
+!N_tot=N_up+N_dw is the total number of fermions
+!npa is the maximum number of configuration or, the dimension of hilbert space
+
+!*********************** 
+!4 sites systems
+! parameter M=4
+!parameter (N_tot=2,N_up=1,npa=16,rh=1.0)
+!parameter (N_tot=4,N_up=2,npa=36,rh=1.0)
+!parameter  (C_up=4),  (M!/(N_up!*(M-N_up)!))
+!parameter  (C_dw=4),   (M!/(N_dw!*(M-N_dw)!))
+
+integer::i,j,k,l,m,n,p,r,s,f,g,w,x,z
+integer,parameter::M_s=3    ! Total numer of sites
+integer,parameter::N_tot=4  ! total number of particles
+integer,parameter::N_up=2   ! Number of up particles
+integer,parameter::N_dw=2    ! Number of down particles
+integer,parameter::C_up=3   ! Total number of up configurations
+integer,parameter::C_dw=3      ! ! Total number of down configurations
+real,parameter::t=1       ! hopping energy
+integer::nhil                       ! Dimension of Hilbert space
+integer::nbit
+integer::count_up                
+integer::count_dw
+integer::sign
+integer::minrange
+integer::maxrange
+integer,dimension(C_up)::basis_up
+integer,dimension(C_dw)::basis_dw
+integer,dimension(C_up)::index_up
+integer,dimension(C_dw)::index_dw
+integer::matrix_up(C_up,C_up)
+integer::matrix_dw(C_dw,C_dw)
+nhil=C_up*C_dw
+!************************
+!         The up states
+!***********************
+minrange=0
+maxrange=0
+ do i=1,N_up
+   minrange=minrange+(2**(i-1))
+  maxrange=maxrange+(2**(M_s-i))
+  end do
+  print*,'minrange=',minrange
+  print*,'maxrange=',maxrange
+!***********
+count_up=0
+
+ do j=minrange,maxrange
+   
+   nbit=0
+   do k=0,(M_s-1)
+     if (btest(j,k)) then 
+       nbit=nbit+1
+       end if
+       end do  
+       if (nbit==N_up)then
+          count_up=count_up+1     
+ do r=count_up,count_up
+     do l=count_up,count_up  
+       basis_up(l)=j     
+     index_up(r)=count_up
+     
+     
+     print*,'      index_up',index_up(r)
+      print*,'         basis_up',basis_up(l)
+ 
+      end do
+            end do
+            
+            end if
+            
+            end do
+            print*,'count_up',count_up
+                        
+print*
+print*
+print*
+         
+!************************
+! The down states
+!************************
+minrange=0
+maxrange=0
+ do i=1,N_up
+   minrange=minrange+(2**(i-1))
+  maxrange=maxrange+(2**(M_s-i))
+  end do
+  print*,'minrange=',minrange
+  print*,'maxrange=',maxrange
+!***********
+count_dw=0
+
+ do m=minrange,maxrange
+   
+   nbit=0
+   do k=0,(M_s-1)
+     if (btest(m,k)) then 
+       nbit=nbit+1
+       end if
+       end do  
+       if (nbit==N_dw)then
+          count_dw=count_dw+1
+          do s=count_dw,count_dw
+            index_dw(s)=count_dw
+            print*,'        index_dw',index_dw(s)
+            end do
+ do n=count_dw,count_dw
+  basis_dw(n)=m
+  print*,          '    basis_dw  ',basis_up(n)
+  end do
+       
+            end if
+            
+  
+            end do          
+
+print*,'count_dw',count_dw
+ 
+print*,'the hilbert space dimension is',nhil
+
+
+                
+       end program hubb_1
+ 
